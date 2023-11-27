@@ -1,0 +1,91 @@
+4 2
+a
+abc
+abd
+b
+2
+
+
+4 2
+d
+c
+ab
+a
+2
+
+
+5 3
+please
+remove
+all
+these
+files
+3
+
+6 2
+aq
+aaq
+aaw
+bq
+bbw
+bbe
+3
+
+7 1
+q
+w
+e
+a
+s
+d
+z
+
+6 3
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabq
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabw
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabd
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaq
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaca
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacv
+
+
+while len(queue) > 0:
+    node = queue.pop()
+    if node.inner_count <= 0 or (
+            node.from_what is not None and node.from_what.is_deleted):
+        continue
+    if node.inner_count <= max_files:
+        past = node
+        max_deleted = 0
+        while past is not None and past.inner_count <= max_files and not past.is_deleted:
+            past.is_deleted = True
+            max_deleted = past.inner_count
+            past.inner_count = 0
+            past = past.from_what
+        if not (past is not None and past.is_deleted):
+            result += 1
+            for v in visited:
+                v.inner_count -= max_deleted
+        continue
+    node.is_visited = True
+    visited.append(node)
+    queue.append(node)
+    next_nodes = [v for v in node.next_nodes.values()]
+    next_nodes.sort(key=lambda x: x.inner_count)
+    queue.extend(next_nodes)
+
+
+
+
+        def add_file(self, filename):
+        self.inner_count += 1
+        if filename == '':
+            return
+        first_char = filename[0]
+        if first_char in self.next_nodes:
+            next_n = self.next_nodes[first_char]
+        else:
+            next_n = PrefixTree(first_char)
+            self.next_nodes[first_char] = next_n
+        next_n.add_file(filename[1:])
+        next_n.prev_node = self

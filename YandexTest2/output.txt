@@ -1,0 +1,9 @@
+Ivan 0
+Anton 0
+Anton 0
+Ivan -1
+Victor -3
+Victor -8
+Denis -1
+Denis -1
+Denis -1
